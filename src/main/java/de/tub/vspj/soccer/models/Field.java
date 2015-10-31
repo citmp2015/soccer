@@ -19,8 +19,9 @@ public class Field implements java.io.Serializable
     public static final int LENGTH = 67930;
 
     //according to Wikipedia for Grundig Stadion in Nürnberg
-    public static final double WIDTH_METERS = 52.5;
-    public static final double LENGTH_METERS = 68.0;
+    //half of the field is 52.5 x 68.0
+    public static final double WIDTH_METERS = WIDTH/1000.0;
+    public static final double LENGTH_METERS = LENGTH/1000.0;
 
     public static final Point CENTER = new Point(WIDTH/2, 0);
     public static final Point2D.Double CENTER_METERS = new Point2D.Double(WIDTH_METERS/2.0, LENGTH_METERS/2.0);
@@ -86,7 +87,7 @@ public class Field implements java.io.Serializable
      * Maps the sensor coordinate system to a meters based coordinate system.
      * The origin (0m,0m) is at the upper left corner (0,LENGTH/2).
      */
-    public static Point2D.Double mapToMeters(int x, int y)
+    /*public static Point2D.Double mapToMeters(int x, int y)
     {
         y = (y-(LENGTH/2))*-1; //normalize first
 
@@ -94,15 +95,17 @@ public class Field implements java.io.Serializable
                 WIDTH_METERS*((double)x/(double)WIDTH),
                 LENGTH_METERS*((double)y/(double)LENGTH)
         );
-    }
+    }*/
 
     public static double distanceBetweenPoints(int x1, int y1, int x2, int y2)
     {
-        Point2D.Double a = mapToMeters(x1, y1);
+        /*Point2D.Double a = mapToMeters(x1, y1);
         Point2D.Double b = mapToMeters(x2, y2);
 
         double x = b.x-a.x;
-        double y = b.y-a.y;
+        double y = b.y-a.y;*/
+        double x = ((double)(x2-x1))/1000.0;
+        double y = ((double)(y2-y1))/1000.0;
 
         return Math.sqrt(x*x+y*y);
     }
