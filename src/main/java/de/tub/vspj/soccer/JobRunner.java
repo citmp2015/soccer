@@ -1,6 +1,6 @@
 package de.tub.vspj.soccer;
 
-import de.tub.vspj.soccer.jobs.AveragePlayerSpeed;
+import de.tub.vspj.soccer.jobs.AggregatedPlayerStats;
 
 public class JobRunner
 {
@@ -17,7 +17,7 @@ public class JobRunner
 
 		switch(args[0])
 		{
-		case "AveragePlayerSpeed": AveragePlayerSpeed.run(moduleArgs); break;
+		case "AggregatedPlayerStats": AggregatedPlayerStats.run(moduleArgs); break;
 		}
 	}
 }

@@ -21,7 +21,7 @@ import org.apache.flink.util.Collector;
 
 import java.util.Iterator;
 
-public class AveragePlayerSpeed
+public class AggregatedPlayerStats
 {
 	public static void run(String[] args) throws Exception
 	{
