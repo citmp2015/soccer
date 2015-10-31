@@ -47,6 +47,8 @@ public class AveragePlayerSpeed
 				//the arms of the goalkeepers
 				if(sensor.sensorType() == ISensor.SensorType.Leg && ((LegSensor)sensor).attachment() == LegSensor.LegAttachment.RightLeg)
 					return true;
+				
+				//TODO: instead of only looking at one leg, we should use the average of both legs
 
 				return false;
 			})
@@ -61,6 +63,7 @@ public class AveragePlayerSpeed
 				SensorData first = null;
 	
 				double totalDistance = 0.0;
+				double maxSpeed = 0.0;
 	
 				for(SensorData value : values)
 				{
@@ -74,15 +77,20 @@ public class AveragePlayerSpeed
 					}
 					
 					//since the data has a way too high (time) resolution, we're only
-					//gonna look every ~0.1s where a player is on the pitch
-					if((value.t()-endTime) < 100000000000L)
+					//gonna look every ~1s where a player is on the pitch
+					if((value.t()-endTime) < 1000000000000L)
 						continue;
 	
 					//ignore when players walk on/off the pitch
 					if(value.t() >= game.startHalfTime() && value.t() <= game.endHalfTime())
 						continue;
 	
-					totalDistance += field.distanceBetweenPoints(prevX, prevY, value.x(), value.y());
+					double distance = field.distanceBetweenPoints(prevX, prevY, value.x(), value.y());
+					double speed = (distance/1000.0)*(3600000000000000.0/((double)(value.t()-endTime)));
+					
+					totalDistance += distance;
+					if(speed > maxSpeed)
+						maxSpeed = speed;
 	
 					prevX = value.x();
 					prevY = value.y();
@@ -92,6 +100,7 @@ public class AveragePlayerSpeed
 				ResultData result = new ResultData();
 				result.owner = field.sensor(first.sid()).owner();
 				result.totalDistance = totalDistance;
+				result.maxSpeed = maxSpeed;
 				result.timePlayed = (endTime-startTime);
 	
 				//account for half time gap
@@ -147,6 +156,7 @@ public class AveragePlayerSpeed
 		public double totalDistance;
 		public long timePlayed;
 		public double averageSpeed;
+        public double maxSpeed;
 
 		@Override
 		public String toString()
@@ -192,6 +202,10 @@ public class AveragePlayerSpeed
 
 			str.append("AvgSpeed(");
 			str.append(Math.round(averageSpeed*10.0)/10.0); //round with 1 decimal place
+			str.append("km/h)   ");
+			
+			str.append("MaxSpeed(");
+			str.append(Math.round(maxSpeed*10.0)/10.0); //round with 1 decimal place
 			str.append("km/h)");
 
 			return str.toString();
