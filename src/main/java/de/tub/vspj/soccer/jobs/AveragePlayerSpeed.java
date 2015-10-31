@@ -74,8 +74,8 @@ public class AveragePlayerSpeed
 					}
 					
 					//since the data has a way too high (time) resolution, we're only
-					//gonna look every ~1s where a player is on the pitch
-					if((value.t()-endTime) < 1000000000000L)
+					//gonna look every ~0.1s where a player is on the pitch
+					if((value.t()-endTime) < 100000000000L)
 						continue;
 	
 					//ignore when players walk on/off the pitch
