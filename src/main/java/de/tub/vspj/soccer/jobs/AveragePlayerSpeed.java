@@ -99,12 +99,12 @@ public class AveragePlayerSpeed
 					result.timePlayed -= (game.endHalfTime()-game.startHalfTime());
 	
 				if(result.timePlayed > 0L) //avoid div by zero
-                {
-                    //first scale down the picoseconds to something more sane
-                    //otherwise 64bit double might overflow
-                    double factor = 3600000000.0/((double)(result.timePlayed/1000000L));
+				{
+					//first scale down the picoseconds to something more sane
+					//otherwise 64bit double might overflow
+					double factor = 3600000000.0/((double)(result.timePlayed/1000000L));
 					result.averageSpeed = (totalDistance/1000.0)*factor;
-                }
+				}
 				
 				collector.collect(result);
 			});
