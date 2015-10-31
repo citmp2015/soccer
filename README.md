@@ -2,7 +2,7 @@
 
 **Running:**
 
-    bin/flink run ../testapp/target/soccer-0.1.jar AveragePlayerSpeed "file:///[wherever]/full-game"
+    bin/flink run ../testapp/target/soccer-0.1.jar AveragePlayerSpeed "file://[wherever]/full-game"
 
 **Preliminary Results:**
 
