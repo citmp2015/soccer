@@ -16,7 +16,7 @@ import java.util.HashMap;
 public class Field implements java.io.Serializable
 {
     public static final int WIDTH = 52483;
-    public static final int LENGTH = 67930;
+    public static final int LENGTH = 67925;
 
     //according to Wikipedia for Grundig Stadion in Nürnberg
     //half of the field is 52.5 x 68.0

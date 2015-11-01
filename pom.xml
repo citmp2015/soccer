@@ -297,11 +297,7 @@ under the License.
 				</plugin>
 			</plugins>
 		</pluginManagement>
-		
-<<<<<<< HEAD
-=======
-		
->>>>>>> AlexBranch
+
 	</build>
 	<profiles>
 		<profile>
