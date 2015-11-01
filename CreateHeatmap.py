@@ -2,7 +2,6 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 import os.path
 import sys
-import ast
 
 print "Generate heatmap out of flink output data. Specify input file: "
 
@@ -12,7 +11,7 @@ if (len(sys.argv) < 2) and not os.path.isfile(sys.argv[1]):
 
 with open(sys.argv[1]) as f:
     title = f.readline()
-    content = [ast.literal_eval(line) for line in f.readlines()]
+    content = [eval(line) for line in f.readlines() if line]
 
 print content
 

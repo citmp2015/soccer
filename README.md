@@ -1,5 +1,7 @@
 # Projekt Verteilte Systeme - Team Soccer
 
+## Average player speed
+
 **Running:**
 
     bin/flink run ../testapp/target/soccer-0.1.jar AggregatedPlayerStats "file://[wherever]/full-game"
@@ -23,3 +25,38 @@
 [Team B] Ben Mueller:   Distance(7.0km)   Played(62min)   AvgSpeed(6.8km/h)   MaxSpeed(24.6km/h)  
 [Team B] Leon Heinze:   Distance(7.1km)   Played(62min)   AvgSpeed(6.9km/h)   MaxSpeed(25.1km/h)  
 [Referee]:   Distance(4.1km)   Played(62min)   AvgSpeed(4.0km/h)   MaxSpeed(34.4km/h)  
+
+## Heatmap
+
+Aggregate the necessary data for the heatmap.
+Helper class is HeatmapData.
+
+    ./flink run target/soccer-0.1.jar HeatmapBall path/to/full-game ouputpath/for/heatmapdata
+
+Currently, the following 2 jobs are working:
+* HeatmapPlayer
+* HeatmapBall
+
+### Create a plot from the measurements
+
+If you have collected the data and stored it into the file, run the python script `CreateHeatmap.py`.
+It will generate the Heatmap.
+
+**Important:**
+
+The script makes use of the service plot.ly.
+For the script to work to have to install the libraries via `sudo pip install plotly` or have a look at the website for you specific platform.
+If you are on Linux, you can use my credentials.
+Install the library and put the following content in the file `~/.plotly/.credentials`.
+
+```
+{
+    "username": "whoww", 
+    "stream_ids": [], 
+    "api_key": "2v7ayto1oy", 
+    "proxy_username": "", 
+    "proxy_password": ""
+}
+```
+
+Then just run the script.

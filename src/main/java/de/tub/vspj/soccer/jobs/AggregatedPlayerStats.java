@@ -1,6 +1,7 @@
 package de.tub.vspj.soccer.jobs;
 
 import de.tub.vspj.soccer.ModelGenerator;
+import de.tub.vspj.soccer.jobs.helper.SensorData;
 import de.tub.vspj.soccer.models.Field;
 import de.tub.vspj.soccer.models.Game;
 import de.tub.vspj.soccer.models.fieldobjects.Goalkeeper;
@@ -119,32 +120,6 @@ public class AggregatedPlayerStats
 			});
 
 		results.print();
-	}
-	
-	/**
-	 * Helper class for AvaregePlayerSpeed to operate on the data.
-	 */
-	public static class SensorData extends Tuple4<Byte, Long, Integer, Integer>
-	{
-		public SensorData()
-		{
-			super();
-		}
-	
-		public SensorData(byte sid, long t, int x, int y)
-		{
-			super();
-	
-			f0 = sid;
-			f1 = t;
-			f2 = x;
-			f3 = y;
-		}
-	
-		public byte sid() {return f0;}
-		public long t() {return f1;}
-		public int x() {return f2;}
-		public int y() {return f3;}
 	}
 
 	/**

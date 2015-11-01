@@ -1,7 +1,9 @@
 package de.tub.vspj.soccer;
 
+import de.tub.vspj.soccer.jobs.AggregateHeatmapDataBall;
+import de.tub.vspj.soccer.jobs.AggregateHeatmapDataReferee;
 import de.tub.vspj.soccer.jobs.AggregatedPlayerStats;
-import de.tub.vspj.soccer.jobs.CreateHeatMapData;
+import de.tub.vspj.soccer.jobs.AggregateHeatmapDataPlayer;
 
 public class JobRunner {
     public static void main(String[] args) throws Exception {
@@ -17,8 +19,14 @@ public class JobRunner {
             case "AggregatedPlayerStats":
                 AggregatedPlayerStats.run(moduleArgs);
                 break;
-            case "CreateHeatMapData":
-                CreateHeatMapData.run(moduleArgs);
+            case "HeatmapPlayer":
+                AggregateHeatmapDataPlayer.run(moduleArgs);
+                break;
+            case "HeatmapBall":
+                AggregateHeatmapDataBall.run(moduleArgs);
+                break;
+            case "HeatmapReferee":
+                AggregateHeatmapDataReferee.run(moduleArgs);
                 break;
         }
     }
