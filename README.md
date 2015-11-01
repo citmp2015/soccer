@@ -29,7 +29,18 @@
 ## Heatmap
 
 Aggregate the necessary data for the heatmap.
-Helper class is HeatmapData.
+The helper class is `HeatmapData.java`, in which you can also define the resolution of the output data for the heatmap.
+```
+// 8 X 13 --> 104 cells
+// 16 X 25 --> 400 cells
+// 32 X 50 --> 1600 cells
+// 64 X 100 --> 6400 cells
+public static int fieldXResolution = 16;
+public static int fieldYResolution = 25;
+```
+
+You can find some sample heatmaps in the folder `sample heatmaps`
+Run the jobs via
 
     ./flink run target/soccer-0.1.jar HeatmapBall path/to/full-game ouputpath/for/heatmapdata
 
