@@ -1,5 +1,6 @@
 package de.tub.vspj.soccer.jobs;
 
+import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.CsvReader;
@@ -43,12 +44,13 @@ public class AggregateHeatmapDataBall {
 
                     // Select all sensors attached to the ball
                     int id = sensor.id();
-                    if(id == 4 || id == 8 || id == 10 || id == 12)
+                    if (id == 4 || id == 8 || id == 10 || id == 12)
                         return true;
 
                     return false;
                 })
                 .<Tuple3<Long, Integer, Integer>>project(1, 2, 3) // Retain type information -> See flink description
+                .sortPartition(0, Order.ASCENDING)
                 .reduceGroup((Iterable<Tuple3<Long, Integer, Integer>> values, Collector<HeatmapData> collector) -> {
                     long startTime = 0;
                     long endTime = 0;

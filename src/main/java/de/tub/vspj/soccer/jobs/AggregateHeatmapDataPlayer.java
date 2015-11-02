@@ -1,5 +1,6 @@
 package de.tub.vspj.soccer.jobs;
 
+import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.CsvReader;
@@ -42,8 +43,6 @@ public class AggregateHeatmapDataPlayer {
                 .filter((value) -> {
                     ISensor sensor = field.sensor(value.sid());
 
-                    // TODO Heatmap data for Ball, Referee, Player and Team
-
                     // To track the position, it should be enough, to get the data from only one sensors per actor
                     if (sensor.sensorType() == ISensor.SensorType.Leg && ((LegSensor) sensor).attachment() == LegSensor.LegAttachment.RightLeg)
                         return true;
@@ -51,6 +50,7 @@ public class AggregateHeatmapDataPlayer {
                     return false;
                 })
                 .groupBy(0)
+                .sortGroup(1, Order.ASCENDING)
                 .reduceGroup((Iterable<SensorData> values, Collector<HeatmapData> collector) -> {
                     long startTime = 0;
                     long endTime = 0;
@@ -71,8 +71,8 @@ public class AggregateHeatmapDataPlayer {
 
                         //since the data has a way too high (time) resolution, we're only
                         //gonna look every ~1s where a player is on the pitch
-//                        if((value.t()-endTime) < 1000000000L)
-//                            continue;
+                        if ((value.t() - endTime) < 1000000000L)
+                            continue;
 
                         //ignore when players walk on/off the pitch
                         if ((value.t() >= game.startHalfTime() && value.t() <= game.endHalfTime())
