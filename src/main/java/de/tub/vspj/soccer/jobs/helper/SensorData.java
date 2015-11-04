@@ -1,5 +1,8 @@
 package de.tub.vspj.soccer.jobs.helper;
 
+import de.tub.vspj.soccer.ModelGenerator;
+import de.tub.vspj.soccer.models.Game;
+import de.tub.vspj.soccer.models.Field;
 import org.apache.flink.api.java.tuple.Tuple4;
 
 /**
@@ -7,6 +10,8 @@ import org.apache.flink.api.java.tuple.Tuple4;
  */
 public class SensorData extends Tuple4<Byte, Long, Integer, Integer>
 {
+    Game game = ModelGenerator.load();
+
     public SensorData()
     {
         super();
@@ -25,5 +30,7 @@ public class SensorData extends Tuple4<Byte, Long, Integer, Integer>
     public byte sid() {return f0;}
     public long t() {return f1;}
     public int x() {return f2;}
-    public int y() {return f3;}
+    public int y() {
+            return t() > game.endHalfTime() ? Field.LENGTH - f3 : f3;
+    }
 }
