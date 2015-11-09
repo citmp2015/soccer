@@ -22,6 +22,7 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.io.ObjectStreamException;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -46,25 +47,31 @@ import org.apache.log4j.Logger;
  */
 public class Job {
 
-	public static final String FILE_PATH = "/home/oxid/Flink/SoccerDataSet/full-game";
-	public static final int GRID_GRANULARITY_DISTANCE_X = 1000;
-	public static final int GRID_GRANULARITY_DISTANCE_Y = 1000;
-	public static final int GRID_GRANULARITY_FIELDS_X = 10;
-	public static final int GRID_GRANULARITY_FIELDS_Y = 10;
-	public static final boolean USE_DISTANCE = true;
-
+	public static String FILE_PATH = "C:\\Users\\Malcolm-X\\Downloads\\full-game2";//"C:\\Users\\Malcolm-X\\Downloads\\full-game2"; //"/full-game"
+	public static int GRID_GRANULARITY_DISTANCE_X = 1000;
+	public static int GRID_GRANULARITY_DISTANCE_Y = 1000;
+	public static int GRID_GRANULARITY_FIELDS_X = 10;
+	public static int GRID_GRANULARITY_FIELDS_Y = 10;
+	public static boolean USE_DISTANCE = true;
+	public static int SENSOR_ID = 13;//left leg of Nick Gertje
+	public static String OUTPUT_FILE = "C:\\Users\\Malcolm-X\\Downloads\\out.csv";
 	// TODO: check integrity of heatmap by calculating missing sensor
 	// information
 	private static Logger log;
 
 
 	public static void main(String[] args) throws Exception {
+		//FILE_PATH = args[0];
+		//GRID_GRANULARITY_FIELDS_X = Integer.getInteger(args[1]);
+		//GRID_GRANULARITY_FIELDS_Y = Integer.getInteger(args[2]);
+		//SENSOR_ID = Integer.getInteger(args[3]);
 
 		// set up the execution environment
 
 		final ExecutionEnvironment env = ExecutionEnvironment
 				.getExecutionEnvironment();
 		System.out.println("Starting new Job: Heatmap");
+
 
 		DataSet<Tuple3<Integer, Integer, Integer>> mappedData = env
 				.readCsvFile(FILE_PATH).ignoreInvalidLines()
@@ -76,8 +83,9 @@ public class Job {
 		
 		DataSet<Tuple2<Tuple2<Integer, Integer>, Integer>> newMappedData = mappedData
 				.flatMap(flatMapFunction).groupBy(0).sum(1);
-
-		newMappedData.print();
+        newMappedData.print();
+		//newMappedData.writeAsText(OUTPUT_FILE);
+        //newMappedData.write();
 		/**
 		 * Here, you can start creating your execution plan for Flink.
 		 *
@@ -97,7 +105,22 @@ public class Job {
 		 */
 
 		// execute program
-		// env.execute("Flink Java API Skeleton");
+		//env.execute("Flink Java API Skeleton");
+	}
+
+	public static final class HeatmapToStringMapper implements FlatMapFunction<Tuple2<Tuple2<Integer, Integer>, Integer>, String>{
+
+		private String name;
+		private int sensorId;
+		public void init(String name, int sensorId){
+			this.name = name;
+			this.sensorId = sensorId;
+		}
+
+		@Override
+		public void flatMap(Tuple2<Tuple2<Integer, Integer>, Integer> tuple2IntegerTuple2, Collector<String> collector) throws Exception {
+
+		}
 	}
 
 	public static final class HeatmapMapper
@@ -134,6 +157,9 @@ public class Job {
 		public void flatMap(Tuple3<Integer, Integer, Integer> value,
 				Collector<Tuple2<Tuple2<Integer, Integer>, Integer>> out)
 				throws Exception {
+			if (!value.f0.equals(SENSOR_ID)){
+				return;
+			}
 			Tuple2<Integer, Integer> key = new Tuple2<Integer, Integer>(
 					this.getXIndexForPosition(value.f1),
 					this.getYIndexForPosition(value.f2));
@@ -142,6 +168,7 @@ public class Job {
 					key, 1);
 			out.collect(mapResult);
 		}
+
 
 		
 		public int getXIndexForPosition(int x) {
